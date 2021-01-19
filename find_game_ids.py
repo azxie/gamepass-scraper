@@ -165,6 +165,8 @@ def parse_product(product: Dict):
     search_title = product["LocalizedProperties"][0]["SearchTitles"][0]["SearchTitleString"]
     xbox = False
     desktop = False
+    start_date = None
+    end_date = None
 
     for availabilities in product["DisplaySkuAvailabilities"]:
         for avail in availabilities:
@@ -177,11 +179,7 @@ def parse_product(product: Dict):
             for condition in avail["Conditions"]:
                 if not isTrial:
                     start_date = dt.dateutil.parse(condition["StartDate"])
-                    end_date = dt.dateutil.parse(condition["EndDate"])
-                else:
-                    start_date = dt.date(1970, 1, 1)
-                    end_date = dt.date(4999, 12, 31)
-                break
+                    break
 
     return GameData(
         name=name,
