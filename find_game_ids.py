@@ -168,15 +168,19 @@ def parse_product(product: Dict):
 
     for availabilities in product["DisplaySkuAvailabilities"]:
         for avail in availabilities:
+            isTrial = avail["Sku"]["Properties"]["IsTrial"]
             for platform in avail["Condition"]["ClientConditions"]["AllowedPlatforms"]:
                 if platform["PlatformName"] == "Windows.Xbox":
                     xbox = True
                 if platform["PlatformName"] == "Windows.Desktop":
                     desktop = True
             for condition in avail["Conditions"]:
-                # if not trrial
+                if not isTrial:
                     start_date = dt.dateutil.parse(condition["StartDate"])
                     end_date = dt.dateutil.parse(condition["EndDate"])
+                else:
+                    start_date = dt.date(1970, 1, 1)
+                    end_date = dt.date(4999, 12, 31)
                 break
 
     return GameData(
